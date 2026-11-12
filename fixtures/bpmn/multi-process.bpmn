@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fictional fixture: two independent processes in one file, linked only by message flows. -->
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" id="Defs_Multi" targetNamespace="http://example.org/fixtures">
+  <collaboration id="Collab_Multi" name="Ordering">
+    <participant id="P_Buyer" name="Buyer" processRef="Proc_Buyer"/>
+    <participant id="P_Seller" name="Seller" processRef="Proc_Seller"/>
+    <messageFlow id="M_Order" name="Order" sourceRef="B_Send" targetRef="S_Start"/>
+    <messageFlow id="M_Invoice" name="Invoice" sourceRef="S_Invoice" targetRef="B_Receive"/>
+  </collaboration>
+  <process id="Proc_Buyer" name="Buyer process">
+    <startEvent id="B_Start" name="Need identified"/>
+    <sendTask id="B_Send" name="Send order"/>
+    <receiveTask id="B_Receive" name="Receive invoice"/>
+    <endEvent id="B_End" name="Order closed"/>
+    <sequenceFlow id="B_F1" sourceRef="B_Start" targetRef="B_Send"/>
+    <sequenceFlow id="B_F2" sourceRef="B_Send" targetRef="B_Receive"/>
+    <sequenceFlow id="B_F3" sourceRef="B_Receive" targetRef="B_End"/>
+  </process>
+  <process id="Proc_Seller" name="Seller process">
+    <startEvent id="S_Start" name="Order received"><messageEventDefinition/></startEvent>
+    <parallelGateway id="S_Fork"/>
+    <task id="S_Pick" name="Pick goods"/>
+    <task id="S_Invoice" name="Issue invoice"/>
+    <parallelGateway id="S_Join"/>
+    <endEvent id="S_End" name="Order fulfilled"/>
+    <sequenceFlow id="S_F1" sourceRef="S_Start" targetRef="S_Fork"/>
+    <sequenceFlow id="S_F2" sourceRef="S_Fork" targetRef="S_Pick"/>
+    <sequenceFlow id="S_F3" sourceRef="S_Fork" targetRef="S_Invoice"/>
+    <sequenceFlow id="S_F4" sourceRef="S_Pick" targetRef="S_Join"/>
+    <sequenceFlow id="S_F5" sourceRef="S_Invoice" targetRef="S_Join"/>
+    <sequenceFlow id="S_F6" sourceRef="S_Join" targetRef="S_End"/>
+  </process>
+</definitions>

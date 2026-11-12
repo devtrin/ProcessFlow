@@ -1,0 +1,6 @@
+tsc -b: OK (no type errors)
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  20:23:58
+   Duration  190ms (transform 42ms, setup 0ms, collect 57ms, tests 5ms, environment 0ms, prepare 4ms)
+

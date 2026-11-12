@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fictional negative fixture: duplicate id, dangling refs, cross-process flow, unknown element. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" id="Defs_Broken" targetNamespace="http://example.org/fixtures">
+  <bpmn:process id="Proc_A" name="Broken A">
+    <bpmn:startEvent id="A_Start"/>
+    <bpmn:task id="A_Task" name="First task"/>
+    <bpmn:task id="A_Task" name="Duplicate id task"/>
+    <bpmn:endEvent id="A_End"/>
+    <bpmn:choreographyTask id="A_Odd" name="Unexpected element"/>
+    <bpmn:sequenceFlow id="A_F1" sourceRef="A_Start" targetRef="A_Task"/>
+    <bpmn:sequenceFlow id="A_F2" sourceRef="A_Task" targetRef="Missing_Node"/>
+    <bpmn:sequenceFlow id="A_F3" sourceRef="A_Task" targetRef="B_Task"/>
+    <bpmn:sequenceFlow id="A_F4" sourceRef="A_Task" targetRef="A_End"/>
+  </bpmn:process>
+  <bpmn:process id="Proc_B" name="Broken B">
+    <bpmn:task id="B_Task" name="Other process task"/>
+  </bpmn:process>
+</bpmn:definitions>

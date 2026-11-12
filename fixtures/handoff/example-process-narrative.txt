@@ -1,0 +1,13 @@
+PROCESS: PURCHASE REQUEST HANDLING (FICTIONAL TEST FIXTURE)
+Owner: Operations. Version: 1.0. This is invented for software testing.
+
+1. The requester submits a purchase request and its budget reference to the manager.
+2. The manager reviews the purchase request and checks the budget reference.
+   INPUTS: purchase request; budget reference. OUTPUT: review result.
+3. DECISION: Is the request approved?
+   YES: The manager records the approval. OUTPUT: approved request.
+   NO: The manager notifies the requester. OUTPUT: rejection notice.
+4. Both branches terminate when the process completes.
+
+AMBIGUITY TO TEST: In some cases, the request may need another review.
+The text does not say who initiates it or when. Do not invent this step.

@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/processflow/process-graph.schema.json",
+  "title": "ProcessFlow illustrative canonical ProcessGraph schema v0.1",
+  "description": "Proposed data contract; Claude may refine with backwards-compatible explanation. This is not BPMN XML.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "process_id",
+    "title",
+    "source",
+    "nodes",
+    "edges",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "process_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "filename",
+        "sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pdf",
+            "bpmn_xml"
+          ]
+        },
+        "filename": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "imported_at": {
+          "type": "string"
+        },
+        "original_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "lanes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "participant_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "node_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "element_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resolved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "review_state": {
+      "enum": [
+        "draft",
+        "needs_review",
+        "reviewed"
+      ]
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "pdf",
+            "bpmn_xml"
+          ]
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string"
+        },
+        "bbox": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "element_id": {
+          "type": "string"
+        },
+        "xpath": {
+          "type": "string"
+        }
+      }
+    },
+    "dataItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "direction",
+        "state",
+        "origin",
+        "source_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "input",
+            "output"
+          ]
+        },
+        "state": {
+          "enum": [
+            "included",
+            "excluded"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "source_explicit",
+            "ai_inferred",
+            "user_added"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "edited_from_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "inputs",
+        "outputs",
+        "source_refs",
+        "review_state"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "start_event",
+            "end_event",
+            "intermediate_event",
+            "task",
+            "subprocess",
+            "exclusive_gateway",
+            "parallel_gateway",
+            "inclusive_gateway",
+            "event_gateway",
+            "unknown"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "participant_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lane_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dataItem"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dataItem"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "review_state": {
+          "enum": [
+            "unverified",
+            "needs_review",
+            "verified",
+            "source_explicit"
+          ]
+        },
+        "layout": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        },
+        "attributes": {
+          "type": "object"
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "target",
+        "kind",
+        "source_refs",
+        "review_state"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "sequence",
+            "message",
+            "association",
+            "inferred_sequence"
+          ]
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "condition_expression": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_default": {
+          "type": "boolean"
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "review_state": {
+          "enum": [
+            "unverified",
+            "needs_review",
+            "verified",
+            "source_explicit"
+          ]
+        }
+      }
+    }
+  }
+}

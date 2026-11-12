@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!DOCTYPE definitions [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" id="d" targetNamespace="http://example.org">&xxe;</definitions>

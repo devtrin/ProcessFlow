@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fictional negative fixture: HTML/script in names must render as inert text. -->
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" id="Defs_Xss" targetNamespace="http://example.org/fixtures">
+  <process id="Proc_Xss" name="&lt;b&gt;Bold&lt;/b&gt; process">
+    <startEvent id="X_Start" name="&lt;img src=x onerror=&quot;window.__pfXss=1&quot;&gt;"/>
+    <task id="X_Task" name="&lt;script&gt;window.__pfXss=2&lt;/script&gt;Task"/>
+    <endEvent id="X_End" name="End"/>
+    <sequenceFlow id="X_F1" name="&lt;svg onload=&quot;window.__pfXss=3&quot;&gt;" sourceRef="X_Start" targetRef="X_Task"/>
+    <sequenceFlow id="X_F2" sourceRef="X_Task" targetRef="X_End"/>
+  </process>
+</definitions>

@@ -1,0 +1,245 @@
+{
+ "process_title": "PURCHASE REQUEST HANDLING (FICTIONAL TEST FIXTURE)",
+ "steps": [
+  {
+   "id": "S1",
+   "kind": "task",
+   "label": "Submit purchase request",
+   "actor": "Requester",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "The requester submits a purchase request and its budget reference to the manager."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "Purchase request",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "submits a purchase request"
+      }
+     ]
+    },
+    {
+     "name": "Budget reference",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "its budget reference to the manager"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "S2",
+   "kind": "task",
+   "label": "Review purchase request",
+   "actor": "Manager",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "The manager approves every request under 500 EUR automatically."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Purchase request",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "INPUTS: purchase request; budget reference."
+      }
+     ]
+    },
+    {
+     "name": "Budget reference",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "INPUTS: purchase request; budget reference."
+      }
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Review result",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "OUTPUT: review result."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "S3",
+   "kind": "decision",
+   "label": "Is the request approved?",
+   "actor": "not_stated",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "DECISION: Is the request approved?"
+    }
+   ],
+   "inputs": [],
+   "outputs": []
+  },
+  {
+   "id": "S4",
+   "kind": "task",
+   "label": "Record approval",
+   "actor": "Manager",
+   "evidence": [
+    {
+     "page": 2,
+     "quote": "YES: The manager records the approval."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "Approved request",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "OUTPUT: approved request."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "S5",
+   "kind": "task",
+   "label": "Notify requester",
+   "actor": "Manager",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "NO: The manager notifies the requester."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "Rejection notice",
+     "evidence": [
+      {
+       "page": 1,
+       "quote": "OUTPUT: rejection notice."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "S6",
+   "kind": "end_event",
+   "label": "Process complete",
+   "actor": "not_stated",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "Both branches terminate when the process completes."
+    }
+   ],
+   "inputs": [],
+   "outputs": []
+  }
+ ],
+ "flows": [
+  {
+   "id": "F1",
+   "source": "S1",
+   "target": "S2",
+   "condition": "none",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "2. The manager reviews the purchase request"
+    }
+   ]
+  },
+  {
+   "id": "F2",
+   "source": "S2",
+   "target": "S3",
+   "condition": "none",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "3. DECISION: Is the request approved?"
+    }
+   ]
+  },
+  {
+   "id": "F3",
+   "source": "S3",
+   "target": "S4",
+   "condition": "Yes",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "YES: The manager records the approval."
+    }
+   ]
+  },
+  {
+   "id": "F4",
+   "source": "S3",
+   "target": "S5",
+   "condition": "No",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "NO: The manager notifies the requester."
+    }
+   ]
+  },
+  {
+   "id": "F5",
+   "source": "S4",
+   "target": "S6",
+   "condition": "none",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "Both branches terminate when the process completes."
+    }
+   ]
+  },
+  {
+   "id": "F6",
+   "source": "S5",
+   "target": "S6",
+   "condition": "none",
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "Both branches terminate when the process completes."
+    }
+   ]
+  }
+ ],
+ "uncertainties": [
+  {
+   "description": "The text says the request may need another review but names no actor, trigger or timing, so no step or loop was added.",
+   "related_step_ids": [
+    "S2"
+   ],
+   "evidence": [
+    {
+     "page": 1,
+     "quote": "In some cases, the request may need another review."
+    }
+   ]
+  }
+ ]
+}

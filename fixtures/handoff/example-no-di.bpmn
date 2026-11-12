@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Definitions_1" targetNamespace="http://example.org/processflow/examples">
+  <collaboration id="Collaboration_1"><participant id="Participant_Main" name="Operations" processRef="Process_Purchase"/></collaboration>
+  <process id="Process_Purchase" name="Purchase request handling" isExecutable="false">
+    <laneSet id="LaneSet_1">
+      <lane id="Lane_Requester" name="Requester"><flowNodeRef>Start_1</flowNodeRef><flowNodeRef>End_1</flowNodeRef></lane>
+      <lane id="Lane_Manager" name="Manager"><flowNodeRef>Task_Review</flowNodeRef><flowNodeRef>Gateway_Approved</flowNodeRef><flowNodeRef>Task_Approve</flowNodeRef><flowNodeRef>Task_Reject</flowNodeRef></lane>
+    </laneSet>
+    <startEvent id="Start_1" name="Request received"/>
+    <task id="Task_Review" name="Review request"/>
+    <exclusiveGateway id="Gateway_Approved" name="Approved?" default="F4"/>
+    <task id="Task_Approve" name="Record approval"/>
+    <task id="Task_Reject" name="Notify requester"/>
+    <endEvent id="End_1" name="Process complete"/>
+    <sequenceFlow id="F1" sourceRef="Start_1" targetRef="Task_Review"/>
+    <sequenceFlow id="F2" sourceRef="Task_Review" targetRef="Gateway_Approved"/>
+    <sequenceFlow id="F3" name="Yes" sourceRef="Gateway_Approved" targetRef="Task_Approve"/>
+    <sequenceFlow id="F4" name="No" sourceRef="Gateway_Approved" targetRef="Task_Reject"/>
+    <sequenceFlow id="F5" sourceRef="Task_Approve" targetRef="End_1"/>
+    <sequenceFlow id="F6" sourceRef="Task_Reject" targetRef="End_1"/>
+  </process>
+</definitions>

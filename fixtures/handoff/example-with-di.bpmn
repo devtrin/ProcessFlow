@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Definitions_1" targetNamespace="http://example.org/processflow/examples">
+  <collaboration id="Collaboration_1"><participant id="Participant_Main" name="Operations" processRef="Process_Purchase"/></collaboration>
+  <process id="Process_Purchase" name="Purchase request handling" isExecutable="false">
+    <laneSet id="LaneSet_1">
+      <lane id="Lane_Requester" name="Requester"><flowNodeRef>Start_1</flowNodeRef><flowNodeRef>End_1</flowNodeRef></lane>
+      <lane id="Lane_Manager" name="Manager"><flowNodeRef>Task_Review</flowNodeRef><flowNodeRef>Gateway_Approved</flowNodeRef><flowNodeRef>Task_Approve</flowNodeRef><flowNodeRef>Task_Reject</flowNodeRef></lane>
+    </laneSet>
+    <startEvent id="Start_1" name="Request received"/>
+    <task id="Task_Review" name="Review request"/>
+    <exclusiveGateway id="Gateway_Approved" name="Approved?" default="F4"/>
+    <task id="Task_Approve" name="Record approval"/>
+    <task id="Task_Reject" name="Notify requester"/>
+    <endEvent id="End_1" name="Process complete"/>
+    <sequenceFlow id="F1" sourceRef="Start_1" targetRef="Task_Review"/>
+    <sequenceFlow id="F2" sourceRef="Task_Review" targetRef="Gateway_Approved"/>
+    <sequenceFlow id="F3" name="Yes" sourceRef="Gateway_Approved" targetRef="Task_Approve"/>
+    <sequenceFlow id="F4" name="No" sourceRef="Gateway_Approved" targetRef="Task_Reject"/>
+    <sequenceFlow id="F5" sourceRef="Task_Approve" targetRef="End_1"/>
+    <sequenceFlow id="F6" sourceRef="Task_Reject" targetRef="End_1"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Process_Purchase">
+      <bpmndi:BPMNShape id="DI_Start_1" bpmnElement="Start_1"><dc:Bounds x="120" y="185" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DI_Task_Review" bpmnElement="Task_Review"><dc:Bounds x="215" y="155" width="130" height="78"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DI_Gateway_Approved" bpmnElement="Gateway_Approved"><dc:Bounds x="395" y="169" width="52" height="52"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DI_Task_Approve" bpmnElement="Task_Approve"><dc:Bounds x="530" y="75" width="135" height="78"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DI_Task_Reject" bpmnElement="Task_Reject"><dc:Bounds x="530" y="252" width="135" height="78"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DI_End_1" bpmnElement="End_1"><dc:Bounds x="730" y="185" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DI_F1" bpmnElement="F1"><di:waypoint x="156" y="203.0"/><di:waypoint x="215" y="194.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DI_F2" bpmnElement="F2"><di:waypoint x="345" y="194.0"/><di:waypoint x="395" y="195.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DI_F3" bpmnElement="F3"><di:waypoint x="447" y="195.0"/><di:waypoint x="530" y="114.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DI_F4" bpmnElement="F4"><di:waypoint x="447" y="195.0"/><di:waypoint x="530" y="291.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DI_F5" bpmnElement="F5"><di:waypoint x="665" y="114.0"/><di:waypoint x="730" y="203.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DI_F6" bpmnElement="F6"><di:waypoint x="665" y="291.0"/><di:waypoint x="730" y="203.0"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

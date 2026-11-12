@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Uses the incorrect namespace from the original conversation; must be rejected with a clear message. -->
+<bpmn:definitions xmlns:bpmn="http://omg.org" id="Defs_Wrong">
+  <bpmn:process id="P"><bpmn:task id="T" name="Task"/></bpmn:process>
+</bpmn:definitions>

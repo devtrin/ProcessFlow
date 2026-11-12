@@ -1,0 +1,10 @@
+# Runtime (pinned versions verified in this PoC; Python 3.11+ required, tested on 3.13)
+fastapi==0.162.5
+uvicorn[standard]==0.54.0
+python-multipart==0.0.33
+pydantic==2.14.3
+lxml==6.1.3
+pymupdf==2.1
+httpx==0.28.1
+# Optional: only needed when PF_INFERENCE_PROVIDER=anthropic
+anthropic==2.8.0

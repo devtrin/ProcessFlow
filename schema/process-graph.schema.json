@@ -1,0 +1,820 @@
+{
+  "$defs": {
+    "DataItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "direction": {
+          "$ref": "#/$defs/Direction"
+        },
+        "state": {
+          "$ref": "#/$defs/ItemState",
+          "default": "included"
+        },
+        "origin": {
+          "$ref": "#/$defs/ItemOrigin"
+        },
+        "source_refs": {
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "edited_from_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edited From Id"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "direction",
+        "origin"
+      ],
+      "title": "DataItem",
+      "type": "object"
+    },
+    "Direction": {
+      "enum": [
+        "input",
+        "output"
+      ],
+      "title": "Direction",
+      "type": "string"
+    },
+    "EdgeKind": {
+      "enum": [
+        "sequence",
+        "message",
+        "association",
+        "inferred_sequence",
+        "boundary_attachment"
+      ],
+      "title": "EdgeKind",
+      "type": "string"
+    },
+    "GraphSource": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/SourceKind"
+        },
+        "filename": {
+          "title": "Filename",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "imported_at": {
+          "title": "Imported At",
+          "type": "string"
+        },
+        "original_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Original Id"
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Id"
+        }
+      },
+      "required": [
+        "kind",
+        "filename",
+        "sha256",
+        "imported_at"
+      ],
+      "title": "GraphSource",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "element_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Element Ids",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "resolved": {
+          "default": false,
+          "title": "Resolved",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "ItemOrigin": {
+      "enum": [
+        "source_explicit",
+        "ai_inferred",
+        "user_added"
+      ],
+      "title": "ItemOrigin",
+      "type": "string"
+    },
+    "ItemState": {
+      "enum": [
+        "included",
+        "excluded"
+      ],
+      "title": "ItemState",
+      "type": "string"
+    },
+    "Lane": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "participant_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Participant Id"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        },
+        "node_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Node Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Lane",
+      "type": "object"
+    },
+    "Layout": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height"
+        },
+        "source": {
+          "const": "bpmndi",
+          "default": "bpmndi",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "title": "Layout",
+      "type": "object"
+    },
+    "NodeKind": {
+      "enum": [
+        "start_event",
+        "end_event",
+        "intermediate_event",
+        "task",
+        "subprocess",
+        "exclusive_gateway",
+        "parallel_gateway",
+        "inclusive_gateway",
+        "event_gateway",
+        "complex_gateway",
+        "unknown"
+      ],
+      "title": "NodeKind",
+      "type": "string"
+    },
+    "Participant": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        },
+        "process_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Process Ref"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Participant",
+      "type": "object"
+    },
+    "ProcessEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/EdgeKind"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "condition_expression": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Condition Expression"
+        },
+        "is_default": {
+          "default": false,
+          "title": "Is Default",
+          "type": "boolean"
+        },
+        "source_refs": {
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "review_state": {
+          "$ref": "#/$defs/ReviewState"
+        },
+        "waypoints": {
+          "anyOf": [
+            {
+              "items": {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Waypoints"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "kind",
+        "review_state"
+      ],
+      "title": "ProcessEdge",
+      "type": "object"
+    },
+    "ProcessNode": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        },
+        "kind": {
+          "$ref": "#/$defs/NodeKind"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "participant_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Participant Id"
+        },
+        "lane_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lane Id"
+        },
+        "actor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor"
+        },
+        "inputs": {
+          "items": {
+            "$ref": "#/$defs/DataItem"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/$defs/DataItem"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "review_state": {
+          "$ref": "#/$defs/ReviewState"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Layout"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "attributes": {
+          "additionalProperties": true,
+          "title": "Attributes",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "review_state"
+      ],
+      "title": "ProcessNode",
+      "type": "object"
+    },
+    "ReviewState": {
+      "enum": [
+        "source_explicit",
+        "unverified",
+        "needs_review",
+        "verified",
+        "needs_clarification"
+      ],
+      "title": "ReviewState",
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "error",
+        "warning",
+        "info"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "SourceKind": {
+      "enum": [
+        "pdf",
+        "bpmn_xml"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/SourceKind"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bbox"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "grounding": {
+          "anyOf": [
+            {
+              "enum": [
+                "exact",
+                "normalised",
+                "wrong_page",
+                "not_found"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grounding"
+        },
+        "element_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Element Id"
+        },
+        "element_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Element Type"
+        },
+        "xpath": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xpath"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2",
+      "default": "0.2",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "process_id": {
+      "title": "Process Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "view": {
+      "default": "process",
+      "enum": [
+        "process",
+        "collaboration",
+        "pdf_draft"
+      ],
+      "title": "View",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/GraphSource"
+    },
+    "participants": {
+      "items": {
+        "$ref": "#/$defs/Participant"
+      },
+      "title": "Participants",
+      "type": "array"
+    },
+    "lanes": {
+      "items": {
+        "$ref": "#/$defs/Lane"
+      },
+      "title": "Lanes",
+      "type": "array"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/ProcessNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/ProcessEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/Issue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "review_state": {
+      "enum": [
+        "draft",
+        "needs_review",
+        "reviewed",
+        "source_explicit"
+      ],
+      "title": "Review State",
+      "type": "string"
+    },
+    "has_source_layout": {
+      "default": false,
+      "title": "Has Source Layout",
+      "type": "boolean"
+    },
+    "provenance": {
+      "additionalProperties": true,
+      "title": "Provenance",
+      "type": "object"
+    }
+  },
+  "required": [
+    "process_id",
+    "title",
+    "source",
+    "review_state"
+  ],
+  "title": "ProcessGraph",
+  "type": "object"
+}

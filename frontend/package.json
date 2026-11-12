@@ -1,0 +1,29 @@
+{
+  "name": "processflow-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "e2e": "playwright test --trace off"
+  },
+  "dependencies": {
+    "@xyflow/react": "12.10.2",
+    "elkjs": "0.11.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@types/node": "22.18.0",
+    "@vitejs/plugin-react": "5.1.0",
+    "typescript": "5.9.3",
+    "vite": "7.2.2",
+    "vitest": "4.0.8"
+  }
+}

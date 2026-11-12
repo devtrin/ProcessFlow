@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fictional ProcessFlow test fixture: bpmn2 prefix, lanes, data associations,
+     collaboration with a black-box pool and message flows, boundary timer event,
+     collapsed sub-process, complex gateway, vendor extension, text annotation. -->
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:vendor="http://example.org/vendor-extension"
+                   id="Defs_Data" targetNamespace="http://example.org/processflow/fixtures">
+  <bpmn2:collaboration id="Collab_Purchase">
+    <bpmn2:participant id="Part_Ops" name="Operations" processRef="Proc_Purchase"/>
+    <bpmn2:participant id="Part_Supplier" name="Supplier"/>
+    <bpmn2:messageFlow id="MF_Order" name="Purchase order" sourceRef="Task_Order" targetRef="Part_Supplier"/>
+    <bpmn2:messageFlow id="MF_Confirm" name="Order confirmation" sourceRef="Part_Supplier" targetRef="Catch_Confirm"/>
+  </bpmn2:collaboration>
+  <bpmn2:process id="Proc_Purchase" name="Purchase with data" isExecutable="false">
+    <bpmn2:laneSet id="LS">
+      <bpmn2:lane id="Lane_Req" name="Requester">
+        <bpmn2:flowNodeRef>Start</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>End_Done</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>End_Rejected</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Mgr" name="Manager">
+        <bpmn2:flowNodeRef>Task_Review</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>GW_Approved</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Timer_Escalate</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_Escalate</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Buy" name="Purchasing">
+        <bpmn2:flowNodeRef>Task_Order</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Catch_Confirm</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Sub_Receive</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>GW_Complex</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+    </bpmn2:laneSet>
+    <bpmn2:dataObject id="DO_Request" name="Purchase request"/>
+    <bpmn2:dataObject id="DO_Budget" name="Budget reference"/>
+    <bpmn2:dataObject id="DO_Result" name="Review result"/>
+    <bpmn2:dataObjectReference id="DOR_Request" dataObjectRef="DO_Request"/>
+    <bpmn2:dataObjectReference id="DOR_Budget" dataObjectRef="DO_Budget"/>
+    <bpmn2:dataObjectReference id="DOR_Result" dataObjectRef="DO_Result"/>
+    <bpmn2:dataStoreReference id="DSR_Ledger" name="Purchase ledger"/>
+    <bpmn2:startEvent id="Start" name="Request received"/>
+    <bpmn2:userTask id="Task_Review" name="Review request">
+      <bpmn2:documentation>Manager checks the request against the budget.</bpmn2:documentation>
+      <bpmn2:extensionElements><vendor:formKey value="review-form"/></bpmn2:extensionElements>
+      <bpmn2:dataInputAssociation id="DIA_Request"><bpmn2:sourceRef>DOR_Request</bpmn2:sourceRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="DIA_Budget"><bpmn2:sourceRef>DOR_Budget</bpmn2:sourceRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="DOA_Result"><bpmn2:targetRef>DOR_Result</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:boundaryEvent id="Timer_Escalate" name="3 days elapsed" attachedToRef="Task_Review" cancelActivity="false">
+      <bpmn2:timerEventDefinition id="TED_1"/>
+    </bpmn2:boundaryEvent>
+    <bpmn2:manualTask id="Task_Escalate" name="Escalate to director"/>
+    <bpmn2:exclusiveGateway id="GW_Approved" name="Approved?" default="SF_No"/>
+    <bpmn2:serviceTask id="Task_Order" name="Send purchase order">
+      <bpmn2:dataInputAssociation id="DIA_Result"><bpmn2:sourceRef>DOR_Result</bpmn2:sourceRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="DOA_Ledger"><bpmn2:targetRef>DSR_Ledger</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:intermediateCatchEvent id="Catch_Confirm" name="Confirmation received">
+      <bpmn2:messageEventDefinition id="MED_1"/>
+    </bpmn2:intermediateCatchEvent>
+    <bpmn2:subProcess id="Sub_Receive" name="Receive goods">
+      <bpmn2:startEvent id="Sub_Start"/>
+      <bpmn2:task id="Sub_Check" name="Check delivery"/>
+      <bpmn2:endEvent id="Sub_End"/>
+      <bpmn2:sequenceFlow id="Sub_F1" sourceRef="Sub_Start" targetRef="Sub_Check"/>
+      <bpmn2:sequenceFlow id="Sub_F2" sourceRef="Sub_Check" targetRef="Sub_End"/>
+    </bpmn2:subProcess>
+    <bpmn2:complexGateway id="GW_Complex" name="All checks?"/>
+    <bpmn2:endEvent id="End_Done" name="Goods received"/>
+    <bpmn2:endEvent id="End_Rejected" name="Request rejected"/>
+    <bpmn2:textAnnotation id="Note_1"><bpmn2:text>Fictional fixture</bpmn2:text></bpmn2:textAnnotation>
+    <bpmn2:association id="Assoc_1" sourceRef="Task_Review" targetRef="Note_1"/>
+    <bpmn2:sequenceFlow id="SF_Start" sourceRef="Start" targetRef="Task_Review"/>
+    <bpmn2:sequenceFlow id="SF_Review" sourceRef="Task_Review" targetRef="GW_Approved"/>
+    <bpmn2:sequenceFlow id="SF_Yes" name="Yes" sourceRef="GW_Approved" targetRef="Task_Order">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${approved == true}</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="SF_No" name="No" sourceRef="GW_Approved" targetRef="End_Rejected"/>
+    <bpmn2:sequenceFlow id="SF_Timer" sourceRef="Timer_Escalate" targetRef="Task_Escalate"/>
+    <bpmn2:sequenceFlow id="SF_Esc" sourceRef="Task_Escalate" targetRef="GW_Approved"/>
+    <bpmn2:sequenceFlow id="SF_Order" sourceRef="Task_Order" targetRef="Catch_Confirm"/>
+    <bpmn2:sequenceFlow id="SF_Confirm" sourceRef="Catch_Confirm" targetRef="Sub_Receive"/>
+    <bpmn2:sequenceFlow id="SF_Sub" sourceRef="Sub_Receive" targetRef="GW_Complex"/>
+    <bpmn2:sequenceFlow id="SF_Complex" sourceRef="GW_Complex" targetRef="End_Done"/>
+  </bpmn2:process>
+</bpmn2:definitions>

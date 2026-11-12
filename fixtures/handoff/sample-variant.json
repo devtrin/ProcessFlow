@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "variant_id": "variant-001",
+  "name": "Pilot rollout",
+  "baseline_process_id": "Process_Purchase",
+  "baseline_source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "version": 1,
+  "changes": [
+    {
+      "op": "exclude",
+      "node_id": "Task_Review",
+      "item_id": "in2",
+      "direction": "input",
+      "reason": "Budget reference not used in pilot"
+    },
+    {
+      "op": "add",
+      "node_id": "Task_Review",
+      "direction": "output",
+      "item": {
+        "id": "out_user_1",
+        "name": "Review checklist",
+        "direction": "output",
+        "state": "included",
+        "origin": "user_added",
+        "source_refs": []
+      }
+    }
+  ],
+  "note": "Fictional example; baseline source sha256 is placeholder."
+}

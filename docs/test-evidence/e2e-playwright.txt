@@ -1,0 +1,16 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 e2e/pdf-review.spec.ts:31:1 › UC-01 (stubbed model): PDF → AI-assisted draft → evidence → review decision persists; ambiguity flagged, not invented (3.9s)
+import+layout+render of 300 nodes: 659 ms; selection->inspector: median 136 ms, p95 162 ms (n=10)
+  ✓   2 e2e/perf.spec.ts:13:1 › NFR-12: 300-node graph renders and selection responds (3.7s)
+  ✓   3 e2e/workbench.spec.ts:22:3 › ProcessFlow workbench › UC-02: import BPMN → select step → tailor → save → backend restart → reload shows saved variant; baseline intact (3.7s)
+  ✓   4 e2e/workbench.spec.ts:99:3 › ProcessFlow workbench › keyboard: Tab to a step and press Enter to select it (1.5s)
+  ✓   5 e2e/workbench.spec.ts:114:3 › ProcessFlow workbench › XML without DI renders with auto layout; with DI offers source layout; semantics shown (1.6s)
+  ✓   6 e2e/workbench.spec.ts:129:3 › ProcessFlow workbench › NFR-08: HTML/script in labels is rendered as text and never executed (1.3s)
+  ✓   7 e2e/workbench.spec.ts:142:3 › ProcessFlow workbench › malicious XML is rejected with a visible diagnostic (1.1s)
+  ✓   8 e2e/workbench.spec.ts:150:3 › ProcessFlow workbench › PDF without a provider: text extracted, drafting clearly unavailable, nothing invented (2.0s)
+  ✓   9 e2e/workbench.spec.ts:162:5 › ProcessFlow workbench › NFR-07 layout at 1366x768: canvas, inspector and controls fit (1.9s)
+  ✓  10 e2e/workbench.spec.ts:162:5 › ProcessFlow workbench › NFR-07 layout at 1920x1080: canvas, inspector and controls fit (1.8s)
+
+  10 passed (23.6s)

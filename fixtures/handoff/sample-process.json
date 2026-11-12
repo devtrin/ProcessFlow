@@ -1,0 +1,315 @@
+{
+  "schema_version": "0.1",
+  "process_id": "Process_Purchase",
+  "title": "Purchase request handling (fictional example)",
+  "source": {
+    "kind": "bpmn_xml",
+    "filename": "example-no-di.bpmn",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "original_id": "Process_Purchase"
+  },
+  "participants": [
+    {
+      "id": "Participant_Main",
+      "name": "Operations"
+    }
+  ],
+  "lanes": [
+    {
+      "id": "Lane_Requester",
+      "name": "Requester",
+      "node_ids": [
+        "Start_1",
+        "End_1"
+      ]
+    },
+    {
+      "id": "Lane_Manager",
+      "name": "Manager",
+      "node_ids": [
+        "Task_Review",
+        "Gateway_Approved",
+        "Task_Approve",
+        "Task_Reject"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "Start_1",
+      "source_id": "Start_1",
+      "kind": "start_event",
+      "label": "Request received",
+      "participant_id": null,
+      "lane_id": "Lane_Requester",
+      "inputs": [],
+      "outputs": [],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "Start_1",
+          "xpath": "//*[@id='Start_1']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "Task_Review",
+      "source_id": "Task_Review",
+      "kind": "task",
+      "label": "Review request",
+      "participant_id": null,
+      "lane_id": "Lane_Manager",
+      "inputs": [
+        {
+          "id": "in1",
+          "name": "Purchase request",
+          "direction": "input",
+          "state": "included",
+          "origin": "source_explicit",
+          "source_refs": [
+            {
+              "type": "bpmn_xml",
+              "element_id": "Task_Review",
+              "xpath": "//*[@id='Task_Review']"
+            }
+          ]
+        },
+        {
+          "id": "in2",
+          "name": "Budget reference",
+          "direction": "input",
+          "state": "included",
+          "origin": "source_explicit",
+          "source_refs": [
+            {
+              "type": "bpmn_xml",
+              "element_id": "Task_Review",
+              "xpath": "//*[@id='Task_Review']"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "out1",
+          "name": "Review result",
+          "direction": "output",
+          "state": "included",
+          "origin": "source_explicit",
+          "source_refs": [
+            {
+              "type": "bpmn_xml",
+              "element_id": "Task_Review",
+              "xpath": "//*[@id='Task_Review']"
+            }
+          ]
+        }
+      ],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "Task_Review",
+          "xpath": "//*[@id='Task_Review']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "Gateway_Approved",
+      "source_id": "Gateway_Approved",
+      "kind": "exclusive_gateway",
+      "label": "Approved?",
+      "participant_id": null,
+      "lane_id": "Lane_Manager",
+      "inputs": [],
+      "outputs": [],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "Gateway_Approved",
+          "xpath": "//*[@id='Gateway_Approved']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "Task_Approve",
+      "source_id": "Task_Approve",
+      "kind": "task",
+      "label": "Record approval",
+      "participant_id": null,
+      "lane_id": "Lane_Manager",
+      "inputs": [],
+      "outputs": [
+        {
+          "id": "out2",
+          "name": "Approved request",
+          "direction": "output",
+          "state": "included",
+          "origin": "source_explicit",
+          "source_refs": [
+            {
+              "type": "bpmn_xml",
+              "element_id": "Task_Review",
+              "xpath": "//*[@id='Task_Review']"
+            }
+          ]
+        }
+      ],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "Task_Approve",
+          "xpath": "//*[@id='Task_Approve']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "Task_Reject",
+      "source_id": "Task_Reject",
+      "kind": "task",
+      "label": "Notify requester",
+      "participant_id": null,
+      "lane_id": "Lane_Manager",
+      "inputs": [],
+      "outputs": [
+        {
+          "id": "out3",
+          "name": "Rejection notice",
+          "direction": "output",
+          "state": "included",
+          "origin": "source_explicit",
+          "source_refs": [
+            {
+              "type": "bpmn_xml",
+              "element_id": "Task_Review",
+              "xpath": "//*[@id='Task_Review']"
+            }
+          ]
+        }
+      ],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "Task_Reject",
+          "xpath": "//*[@id='Task_Reject']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "End_1",
+      "source_id": "End_1",
+      "kind": "end_event",
+      "label": "Process complete",
+      "participant_id": null,
+      "lane_id": "Lane_Requester",
+      "inputs": [],
+      "outputs": [],
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "End_1",
+          "xpath": "//*[@id='End_1']"
+        }
+      ],
+      "review_state": "source_explicit"
+    }
+  ],
+  "edges": [
+    {
+      "id": "F1",
+      "source": "Start_1",
+      "target": "Task_Review",
+      "kind": "sequence",
+      "label": null,
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F1",
+          "xpath": "//*[@id='F1']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "F2",
+      "source": "Task_Review",
+      "target": "Gateway_Approved",
+      "kind": "sequence",
+      "label": null,
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F2",
+          "xpath": "//*[@id='F2']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "F3",
+      "source": "Gateway_Approved",
+      "target": "Task_Approve",
+      "kind": "sequence",
+      "label": "Yes",
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F3",
+          "xpath": "//*[@id='F3']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "F4",
+      "source": "Gateway_Approved",
+      "target": "Task_Reject",
+      "kind": "sequence",
+      "label": "No",
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F4",
+          "xpath": "//*[@id='F4']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "F5",
+      "source": "Task_Approve",
+      "target": "End_1",
+      "kind": "sequence",
+      "label": null,
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F5",
+          "xpath": "//*[@id='F5']"
+        }
+      ],
+      "review_state": "source_explicit"
+    },
+    {
+      "id": "F6",
+      "source": "Task_Reject",
+      "target": "End_1",
+      "kind": "sequence",
+      "label": null,
+      "source_refs": [
+        {
+          "type": "bpmn_xml",
+          "element_id": "F6",
+          "xpath": "//*[@id='F6']"
+        }
+      ],
+      "review_state": "source_explicit"
+    }
+  ],
+  "issues": [],
+  "review_state": "reviewed"
+}
